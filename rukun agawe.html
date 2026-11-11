@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koperasi Rukun Agawe Santosa</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f9; }
+        h1, h2 { color: #333; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .products { flex: 2; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 4px; }
+        button { background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #218838; }
+        .cart { flex: 1; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); height: fit-content; }
+        ul { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Toko Online Mini</h1>
+    
+    <div class="container">
+        <!-- Daftar Produk -->
+        <div class="products">
+            <div class="card">
+                <h3>Minyak Goreng 1 liter</h3>
+                <p>Rp 20.000</p>
+                <button onclick="tambahKeKeranjang('Minyak Goreng 1 Liter', 20000)">Beli</button>
+            </div>
+            <div class="card">
+                <h3>Gula Pasir 1 KG</h3>
+                <p>Rp 18.000</p>
+                <button onclick="tambahKeKeranjang('Gula Pasir 1 KG', 18000)">Beli</button>
+            </div>
+            <div class="card">
+                <h3>Beras Medium 5kg</h3>
+                <p>Rp 80.000</p>
+                <button onclick="tambahKeKeranjang('Beras Medium 5kg', 80000)">Beli</button>
+            </div>
+        </div>
+
+        <!-- Keranjang Belanja -->
+        <div class="cart">
+            <h2>Keranjang Belanja</h2>
+            <ul id="daftar-keranjang">
+                <li>Keranjang masih kosong</li>
+            </ul>
+            <hr>
+            <h3>Total: Rp <span id="total-harga">0</span></h3>
+            <button style="width: 100%; background: #007bff;" onclick="checkout()">Checkout via WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        let keranjang = [];
+
+        function tambahKeKeranjang(nama, harga) {
+            keranjang.push({ nama, harga });
+            tampilkanKeranjang();
+        }
+
+        function tampilkanKeranjang() {
+            const list = document.getElementById('daftar-keranjang');
+            const totalSpan = document.getElementById('total-harga');
+            
+            list.innerHTML = '';
+            let total = 0;
+
+            if (keranjang.length === 0) {
+                list.innerHTML = '<li>Keranjang masih kosong</li>';
+            } else {
+                keranjang.forEach((item, index) => {
+                    total += item.harga;
+                    list.innerHTML += `<li>${item.nama} - Rp ${item.harga.toLocaleString()}</li>`;
+                });
+            }
+            totalSpan.innerText = total.toLocaleString();
+        }
+
+        function checkout() {
+            if (keranjang.length === 0) {
+                alert('Keranjang masih kosong!');
+                return;
+            }
+            let pesan = "Halo, saya ingin memesan:\n";
+            let total = 0;
+            keranjang.forEach(item => {
+                pesan += `- ${item.nama} (Rp ${item.harga.toLocaleString()})\n`;
+                total += item.harga;
+            });
+            pesan += `\nTotal: Rp ${total.toLocaleString()}`;
+            
+            // Mengarahkan langsung ke WhatsApp (ganti nomor dengan nomor Anda)
+            let url = `https://wa.me/6285691234830?text=${encodeURIComponent(pesan)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+
+</body>
+</html>
